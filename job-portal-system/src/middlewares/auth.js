@@ -34,3 +34,12 @@ export const authorize = (...roles) => {
 };
 
 export const auth = authenticate;
+
+export const employerAuth = async (req, res, next) => {
+    authenticate(req, res, () => {
+        if (req.user.role !== 'employer') {
+            return errorResponse(res, 'Employer access required', 403);
+        }
+        next();
+    });
+};

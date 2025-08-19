@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import app from './app.js';
 
+// Bypass SSL certificate validation
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;

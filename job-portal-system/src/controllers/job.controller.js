@@ -55,3 +55,28 @@ export const deleteJob = async (req, res) => {
         res.status(500).json(new ApiResponse(500, null, error.message));
     }
 };
+
+export const getMyJobs = async (req, res) => {
+    try {
+        const jobs = await Job.find({ postedBy: req.user.id });
+        res.json(new ApiResponse(200, jobs, 'Your jobs retrieved successfully'));
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, null, error.message));
+    }
+};
+
+export const updateJob = async (req, res) => {
+    try {
+        const job = await Job.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true }
+        );
+        if (!job) {
+            return res.status(404).json(new ApiResponse(404, null, 'Job not found'));
+        }
+        res.json(new ApiResponse(200, job, 'Job updated successfully'));
+    } catch (error) {
+        res.status(400).json(new ApiResponse(400, null, error.message));
+    }
+};

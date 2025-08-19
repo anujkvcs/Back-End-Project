@@ -25,3 +25,25 @@ export const login = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await User.find().select('-password');
+        res.json({ success: true, data: users });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const getUserById = async (req, res) => {
+    try {
+        const userId = req.params.id || req.user.id;
+        const user = await User.findById(userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        res.json({ success: true, data: user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

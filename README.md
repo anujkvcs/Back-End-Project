@@ -75,6 +75,12 @@ JWT_SECRET=your_jwt_secret_key
 CORS_ORIGIN=*
 ```
 
+### MongoDB Atlas Setup
+
+1. **IP Whitelist**: Add your IP address to MongoDB Atlas Network Access
+2. **SSL Configuration**: Both systems include SSL configuration for Atlas connections
+3. **Connection Issues**: If experiencing SSL errors, ensure your Atlas cluster allows connections from your IP
+
 ## API Documentation
 
 Detailed API documentation and usage instructions are available in each system's README:

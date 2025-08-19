@@ -48,6 +48,12 @@ Thumbs.db
 *.swo
 *~
 
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
 # Build directories
 build/
 dist/

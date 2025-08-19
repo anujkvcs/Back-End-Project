@@ -36,3 +36,26 @@ export const getProfile = async (req, res) => {
         res.status(500).json(new ApiResponse(500, null, error.message));
     }
 };
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const { role } = req.query;
+        const query = role ? { role } : {};
+        const users = await User.find(query).select('-password');
+        res.json(new ApiResponse(200, users, 'Users retrieved successfully'));
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, null, error.message));
+    }
+};
+
+export const getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) {
+            return res.status(404).json(new ApiResponse(404, null, 'User not found'));
+        }
+        res.json(new ApiResponse(200, user, 'User retrieved successfully'));
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, null, error.message));
+    }
+};

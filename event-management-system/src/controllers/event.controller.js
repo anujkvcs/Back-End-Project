@@ -81,3 +81,40 @@ export const approveEvent = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+export const getEventById = async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id)
+            .populate('createdBy', 'name')
+            .populate('registeredUsers', 'name email');
+        if (!event) {
+            return res.status(404).json({ success: false, message: 'Event not found' });
+        }
+        res.json({ success: true, data: event });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const getMyEvents = async (req, res) => {
+    try {
+        const events = await Event.find({ createdBy: req.user.id })
+            .populate('registeredUsers', 'name email');
+        res.json({ success: true, data: events });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export const getEventRegistrations = async (req, res) => {
+    try {
+        const event = await Event.findById(req.params.id)
+            .populate('registeredUsers', 'name email role');
+        if (!event) {
+            return res.status(404).json({ success: false, message: 'Event not found' });
+        }
+        res.json({ success: true, data: event.registeredUsers });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

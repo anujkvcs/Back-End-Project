@@ -55,3 +55,47 @@ export const deleteApplication = async (req, res) => {
         res.status(500).json(new ApiResponse(500, null, error.message));
     }
 };
+
+export const getJobApplications = async (req, res) => {
+    try {
+        const applications = await Application.find({ job: req.params.jobId })
+            .populate('user', 'name email phone')
+            .populate('job', 'title company');
+        res.json(new ApiResponse(200, applications, 'Job applications retrieved successfully'));
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, null, error.message));
+    }
+};
+
+export const getApplicationById = async (req, res) => {
+    try {
+        const application = await Application.findById(req.params.id)
+            .populate('user', 'name email phone')
+            .populate('job', 'title company location salary');
+        if (!application) {
+            return res.status(404).json(new ApiResponse(404, null, 'Application not found'));
+        }
+        res.json(new ApiResponse(200, application, 'Application retrieved successfully'));
+    } catch (error) {
+        res.status(500).json(new ApiResponse(500, null, error.message));
+    }
+};
+
+export const updateApplicationStatus = async (req, res) => {
+    try {
+        const { status } = req.body;
+        const application = await Application.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        ).populate('user', 'name email').populate('job', 'title company');
+        
+        if (!application) {
+            return res.status(404).json(new ApiResponse(404, null, 'Application not found'));
+        }
+
+        res.json(new ApiResponse(200, application, 'Application status updated successfully'));
+    } catch (error) {
+        res.status(400).json(new ApiResponse(400, null, error.message));
+    }
+};
